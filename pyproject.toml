@@ -1,18 +1,20 @@
-[tool.poetry]
+[project]
 name = "silver-garbanzo"
 version = "0.1.0"
 description = "Local CLI tool to ingest bank CSV exports, validate strict date ranges, categorize deterministically, and report spend/income by period."
-authors = ["jeisenback <jeisenback@gmail.com>"]
 readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "jeisenback", email = "jeisenback@gmail.com" }]
+dependencies = [
+  "pandas>=2.2,<3.0",
+]
+
+[tool.poetry]
 packages = [{ include = "silver_garbanzo", from = "src" }]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-pandas = "^2.2.0"
-
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.0.0"
-ruff = "^0.6.0"
+pytest = ">=8,<9"
+ruff = ">=0.6,<1.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

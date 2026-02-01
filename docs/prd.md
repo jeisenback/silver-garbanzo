@@ -6,32 +6,21 @@ A local, CLI-driven tool that ingests monthly or explicitly ranged bank transact
 The tool prioritizes data correctness, auditability, and iteration speed over automation or intelligence.
 
 2. Problem statement
-
 You manage personal finances using CSV exports from financial institutions. These exports are easy to mis-ingest:
-
 overlapping date ranges
-
 inconsistent signs
-
 ambiguous merchants
-
 repeated re-imports
-
 Silent ingestion errors destroy trust in the output.
 
 You need a system that fails loudly when inputs are unsafe, makes decisions explicit, and allows fast correction without rewriting history.
 
 3. Goals
 Primary goals
-
 Prevent accidental overlap or double ingestion
-
 Enforce a clear ingest contract using filenames
-
 Produce trustworthy monthly (and other period) summaries
-
 Enable rapid categorization fixes
-
 Maintain a durable decision trail
 
 Secondary goals
