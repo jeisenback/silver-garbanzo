@@ -40,12 +40,16 @@ Example: `0001-use-pandas-for-csv-processing.md`
 5. Submit as part of a PR for team review
 6. Update Status to `Accepted` once approved
 
-## Index
+## Architecture Decision Records
 
 | ADR | Title | Status |
 |-----|-------|--------|
 | [0000](0000-adr-template.md) | ADR Template | Accepted |
+| [0001](0001-use-poetry-and-ruff.md) | Use Poetry for dependency management and Ruff for linting | Accepted |
+| [0002](0002-correctness-first-ingest.md) | Correctness-first ingest with hard failures | Accepted |
+| [0003](0003-filename-date-range-contract.md) | Filename-declared date ranges as ingest contract | Accepted |
+| [0004](0004-range-registry.md) | Range registry with overlap prevention | Accepted |
+| [0005](0005-local-single-user.md) | Local-only, single-user execution model | Accepted |
 
----
 
 *This ADR framework is inspired by [Documenting Architecture Decisions](https://adr.github.io/)*
