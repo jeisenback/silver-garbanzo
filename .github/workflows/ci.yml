@@ -1,22 +1,23 @@
-name: CI
+name: ci
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [dev, main]
   push:
-    branches: [ main ]
+    branches: [dev]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install Poetry
         run: |
@@ -25,13 +26,13 @@ jobs:
 
       - name: Install dependencies
         run: |
-          poetry config virtualenvs.create false --local
-          poetry install --no-interaction --only dev
+          poetry --version
+          poetry install --with dev
 
-      - name: Lint (placeholder)
+      - name: Lint (ruff)
         run: |
-          echo "TODO: run linter here (e.g. ruff .)"
+          poetry run ruff check .
 
-      - name: Test (placeholder)
+      - name: Tests (pytest)
         run: |
-          echo "TODO: run tests here (e.g. pytest -q)"
+          poetry run pytest
