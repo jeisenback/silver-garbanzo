@@ -51,6 +51,15 @@ Branch naming:
 
 ---
 
+## Feature Implementation Example
+
+- For features like dry-run mode, create a dedicated feature branch (e.g., `feat/13-dry-run-mode`).
+- Add CLI flags and ensure all contract checks run in dry-run mode, but no state/output files are written.
+- Add tests to verify dry-run logic (no registry writes, all validations run).
+- Update documentation to reflect new CLI options and behavior.
+
+---
+
 ## Merging to main
 
 - Merge `dev` → `main` only at phase boundaries or after a coherent set of issues

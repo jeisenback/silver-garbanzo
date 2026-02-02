@@ -111,6 +111,13 @@ Dates or amounts cannot be parsed reliably
 
 There is no silent fallback.
 
+6.4 Dry-run mode
+
+- CLI flag `--dry-run` runs all contract checks, validations, and warnings
+- No registry, output, or state files are written
+- Output clearly indicates dry-run status and what would have changed
+- Used for safe validation and CI
+
 7. Overlap prevention (MVP approach)
 7.1 Range registry
 

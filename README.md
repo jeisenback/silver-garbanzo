@@ -53,8 +53,8 @@ See [docs/data-layout.md](docs/data-layout.md) for detailed conventions.
 - [x] Atomic registry updates
 - [x] Track & prevent overlaps (see `src/silver_garbanzo/overlap.py`)
 
-### Phase C — Safety & Testing (⏳ PLANNED)
-- [ ] Dry-run mode
+### Phase C — Safety & Testing (⏳ IN PROGRESS)
+- [x] Dry-run mode (`--dry-run` CLI flag: validates all contracts, prevents state/output writes)
 - [ ] Profile mode
 - [ ] Sample datasets & CI fixtures
 - [ ] Config validation
