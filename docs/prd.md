@@ -122,7 +122,7 @@ Schema:
 
 account,start_date,end_date,source_file,ingested_at
 
-Registry is appended after every successful ingest and serves as the audit trail for all ingested ranges.
+Registry is appended after every successful ingest and serves as the audit trail for all ingested ranges. Updates are performed atomically: write to a temp file, then replace the original file in a single operation to prevent partial writes.
 
 7.2 Overlap definition
 
