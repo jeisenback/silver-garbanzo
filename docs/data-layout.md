@@ -190,3 +190,9 @@ A: Not recommended. Each user maintains their own ingestion history and local co
 - [.gitignore](../../.gitignore) — Data safety ignore rules
 - [docs/dev_workflow.md](../dev_workflow.md) — Data safety rules in workflow
 - [docs/esod.md](../esod.md#data-separation) — System design reference
+
+### Dry-run Mode
+
+- When running with `--dry-run`, no files in `state/` or `data/sample/` are written or modified.
+- All contract checks, validations, and warnings are performed as normal.
+- Output indicates dry-run status and what would have changed.
