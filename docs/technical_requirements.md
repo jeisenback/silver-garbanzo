@@ -69,7 +69,7 @@ The system must fail immediately and clearly when:
 - Filename contract is invalid
 - Required CSV headers are missing (Date, Description, Amount, Transaction_Type)
 - Dates cannot be parsed
-- CSV dates exceed filename-declared range
+- CSV dates exceed filename-declared range (hard fail)
 - Ingested range overlaps prior ingested range
 - Required config files are malformed
 Error messages must include:

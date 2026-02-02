@@ -15,6 +15,29 @@ def validate_csv_headers(headers: list[str]) -> None:
     # extra = [h for h in headers if h not in REQUIRED_HEADERS]
     # if extra:
     #     raise ValueError(f"Unexpected header(s): {extra}. Required: {REQUIRED_HEADERS}")
+
+def validate_csv_date_range(rows: list[dict], start_date, end_date) -> None:
+    """
+    Validate that all dates in the CSV fall within the declared filename range.
+    Args:
+        rows: List of dicts, each representing a CSV row with a 'Date' field.
+        start_date: datetime, start of allowed range (inclusive)
+        end_date: datetime, end of allowed range (inclusive)
+    Raises:
+        ValueError: If any row's date is outside the allowed range.
+    """
+    from datetime import datetime
+    out_of_range = []
+    for i, row in enumerate(rows):
+        try:
+            date = datetime.strptime(row["Date"], "%Y-%m-%d")
+        except Exception as e:
+            raise ValueError(f"Row {i+1}: Invalid date format '{row['Date']}' ({e})")
+        if not (start_date <= date <= end_date):
+            out_of_range.append((i+1, row["Date"]))
+    if out_of_range:
+        raise ValueError(f"CSV contains dates outside filename-declared range: {out_of_range}")
+
 """
 contracts.py — Filename and data contract validation.
 
