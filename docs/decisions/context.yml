@@ -1,0 +1,179 @@
+project:
+  name: silver-garbanzo
+  purpose: >
+    Local, single-user CLI tool to ingest personal banking CSV statements,
+    enforce strict safety contracts, categorize transactions deterministically,
+    and report spend/income by period and category.
+  philosophy:
+    - correctness-first
+    - fail-fast on unsafe inputs
+    - warnings only for recoverable ambiguity
+    - minimal tooling
+    - no silent data mutation
+
+scope:
+  user_model: single_user
+  execution: local_only
+  data_safety:
+    real_data_committed: false
+    ignored_paths:
+      - data/raw/
+      - state/
+  out_of_scope:
+    - multi-user features
+    - background services
+    - databases
+    - web interfaces
+    - automatic deduplication (manual overlap validation instead)
+
+repository:
+  status:
+    repo_initialized: true
+    github_remote_configured: true
+    dev_branch_exists: true
+  branches:
+    main:
+      intent: always-safe-to-run-on-real-data
+      protection:
+        enforced: depends_on_repo_visibility
+        rules:
+          - PR_required
+          - approvals_required
+          - status_checks_required_after_CI
+    dev:
+      intent: integration branch
+      default_branch: true
+  workflow:
+    branch_naming: "feat/<issue-number>-<short-slug>"
+    merge_policy:
+      - feature -> dev via PR
+      - dev -> main only at phase boundaries
+
+issues_completed:
+  - id: 1
+    title: Initialize repository skeleton and ignore unsafe paths
+    artifacts:
+      - .gitignore
+      - README.md
+      - base folder structure
+  - id: 2
+    title: Establish main/dev branches and protect main
+    notes:
+      - branch protection enforceability depends on repo visibility/plan
+  - id: 3
+    title: Python runtime and dependency pinning
+    decisions:
+      - python_version: ">=3.11"
+      - dependency_manager: poetry
+      - src_layout: src/silver_garbanzo
+  - id: 4
+    title: Add CI workflow skeleton
+    ci:
+      provider: github_actions
+      workflow_name: ci
+      checks:
+        - ruff
+        - pytest
+  - id: 5
+    title: ADR framework and index
+    adr_location: docs/decisions
+    initial_adr:
+      id: 0001
+      decision: use_poetry_and_ruff
+
+tooling:
+  python:
+    version: ">=3.11"
+    packaging:
+      standard: PEP_621
+      build_backend: poetry-core
+  dependency_management:
+    tool: poetry
+    lockfile_committed: true
+  linting:
+    tool: ruff
+    ruleset:
+      select:
+        - E
+        - F
+        - I
+    excluded_tools:
+      - black
+      - isort
+      - mypy
+      - pylint
+      - pre-commit
+  testing:
+    framework: pytest
+    initial_test:
+      - smoke_import_test
+
+ci:
+  workflow:
+    file: .github/workflows/ci.yml
+    triggers:
+      - pull_request: [dev, main]
+      - push: [dev]
+    environment:
+      os: ubuntu-latest
+      python: "3.11"
+    steps:
+      - checkout
+      - setup_python
+      - install_poetry
+      - poetry_install_with_dev
+      - ruff_check
+      - pytest
+
+documents:
+  canonical_docs:
+    - docs/technical_requirements.md
+    - docs/dev_workflow.md
+    - docs/decisions/README.md
+  governance:
+    adr_required_for:
+      - contract_changes
+      - safety_rule_changes
+      - tooling_decisions
+      - state_semantics_changes
+
+ingestion_contract (planned / partially implemented):
+  filename_contract:
+    required_range: true
+    overlap_allowed: false
+  csv_contract:
+    required_headers:
+      - Date
+      - Description
+      - Amount
+      - Transaction_Type
+  state:
+    registry: state/ingested_ranges.csv
+    mutation_rules:
+      - atomic_writes
+      - no_mutation_on_dry_run
+
+planned_features (future issues already defined):
+  safety_iteration:
+    - dry_run_mode
+    - profile_mode
+    - sample_fixtures
+    - config_schema_validation
+  categorization:
+    - rule_based_matching
+    - overrides
+    - splits
+  reporting:
+    - spend_by_category
+    - income_by_period
+    - period_aggregation
+
+open_constraints:
+  - branch_protection_full_enforcement_requires_public_repo_or_upgrade
+  - status_checks_required_after_ci_first_run
+
+current_state_summary:
+  foundation: complete
+  ci: present_and_green
+  safety_scaffolding: in_progress
+  ready_for_next_issue: true
