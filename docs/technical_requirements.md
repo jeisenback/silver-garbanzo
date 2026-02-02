@@ -19,6 +19,7 @@ Persistent state limited to:
 range registry (state/ingested_ranges.csv; schema: account,start_date,end_date,source_file,ingested_at; append after every successful ingest; updates performed via atomic file replace)
 Overlap detection enforced via `src/silver_garbanzo/overlap.py` (see PRD/ESOD for details)
 Dry-run mode (`--dry-run`): all validations run, no state/output files written
+Profile mode (`--profile`): reports ingest timing and peak memory usage
 No background processes
 No daemons
 No scheduled jobs
