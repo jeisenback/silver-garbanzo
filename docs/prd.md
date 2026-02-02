@@ -124,18 +124,19 @@ account,start_date,end_date,source_file,ingested_at
 
 Registry is appended after every successful ingest and serves as the audit trail for all ingested ranges. Updates are performed atomically: write to a temp file, then replace the original file in a single operation to prevent partial writes.
 
-7.2 Overlap definition
+7.2 Overlap definition & detection
 
 Two ranges overlap if:
 
 new_start <= existing_end AND new_end >= existing_start
 
-
 Touching edges (end on Jan 31, start on Feb 1) are allowed.
+
+Overlap detection is implemented in `src/silver_garbanzo/overlap.py` and enforced before registry append.
 
 7.3 Behavior
 
-Overlap → hard fail
+Overlap → hard fail (error message includes conflicting file/range)
 
 Registry is appended only after successful ingest
 

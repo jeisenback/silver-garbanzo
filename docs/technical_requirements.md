@@ -17,6 +17,7 @@ Invocation: User-initiated, synchronous execution
 State:
 Persistent state limited to:
 range registry (state/ingested_ranges.csv; schema: account,start_date,end_date,source_file,ingested_at; append after every successful ingest; updates performed via atomic file replace)
+Overlap detection enforced via `src/silver_garbanzo/overlap.py` (see PRD/ESOD for details)
 No background processes
 No daemons
 No scheduled jobs
@@ -70,7 +71,7 @@ The system must fail immediately and clearly when:
 - Required CSV headers are missing (Date, Description, Amount, Transaction_Type)
 - Dates cannot be parsed
 - CSV dates exceed filename-declared range (hard fail)
-- Ingested range overlaps prior ingested range
+- Ingested range overlaps prior ingested range (see overlap detection logic)
 - Required config files are malformed
 Error messages must include:
 - File name
