@@ -1,0 +1,5 @@
+# Sample monthly file for contract validation
+Date,Description,Amount,Transaction_Type
+2026-01-01,Test Grocery,-50.00,DEBIT
+2026-01-15,Test Income,1000.00,CREDIT
+2026-01-31,Test Utility,-75.00,DEBIT
