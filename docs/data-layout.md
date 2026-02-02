@@ -67,14 +67,23 @@ state/
     run-2026-02-10.log
   exports/                ← Output CSVs from the most recent run
     run-2026-02-10.csv
-  rules.json              ← Category rules (local overrides or backups)
-  splits.csv              ← Manual transaction splits (local edits)
-  overrides.csv           ← Category overrides (local edits)
+  config/
+    rules.json            ← Category rules (required, validated on startup)
+    splits.csv            ← Manual transaction splits (optional, validated if present)
+    overrides.csv         ← Category overrides (optional, validated if present)
 ```
 
 ---
 
 ## Data Safety Principles
+## Config Validation & Error Handling
+
+All config files in `config/` are validated on CLI startup:
+- `rules.json` (required): Must be a list of objects with `category` and `pattern` (regex must compile)
+- `overrides.csv` (optional): Must have headers `key,category`
+- `splits.csv` (optional): Must have headers `fingerprint,category,amount` (amount must parse as float)
+
+Malformed config files cause hard failure with clear error messages. Missing optional files do not fail unless required for the operation.
 
 ### Correctness First
 
@@ -181,7 +190,7 @@ A: `state/ingested_ranges.csv` is local and not backed up by git. If lost:
 
 **Q: Can I share my `state/` directory with another user?**
 
-A: Not recommended. Each user maintains their own ingestion history and local config (`rules.json`, `splits.csv`, `overrides.csv`). Share the committed data (`data/sample/`) and documented rules instead.
+A: Not recommended. Each user maintains their own ingestion history and local config (`config/rules.json`, `config/splits.csv`, `config/overrides.csv`). Share the committed data (`data/sample/`) and documented rules instead.
 
 ---
 
@@ -194,5 +203,5 @@ A: Not recommended. Each user maintains their own ingestion history and local co
 ### Dry-run Mode
 
 - When running with `--dry-run`, no files in `state/` or `data/sample/` are written or modified.
-- All contract checks, validations, and warnings are performed as normal.
+- All contract checks, config validations, and warnings are performed as normal.
 - Output indicates dry-run status and what would have changed.

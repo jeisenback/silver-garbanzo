@@ -38,28 +38,37 @@ See [docs/data-layout.md](docs/data-layout.md) for detailed conventions.
 
 ## Status
 
-### Phase A — Foundation (✅ COMPLETE)
+### Phase A — Foundation (COMPLETE)
 - [x] Repository skeleton & branch strategy
 - [x] Python runtime & dependencies pinned
 - [x] CI workflow (placeholder lint/test)
 - [x] ADR framework & documentation discipline
 - [x] Data layout & safety conventions
 
-### Phase B — Ingest Contract (🔄 IN PROGRESS)
+### Phase B — Ingest Contract (IN PROGRESS)
 - [x] Parse date range from filename
 - [x] Validate CSV header schema (Date, Description, Amount, Transaction_Type)
 - [x] Enforce filename-to-CSV date contract
 - [x] Track ingested ranges in local registry
 - [x] Atomic registry updates
-- [x] Track & prevent overlaps (see `src/silver_garbanzo/overlap.py`)
+- [x] Track & prevent overlaps (see src/silver_garbanzo/overlap.py)
 
-### Phase C — Safety & Testing (⏳ IN PROGRESS)
-- [x] Dry-run mode (`--dry-run` CLI flag: validates all contracts, prevents state/output writes)
-- [x] Profile mode (`--profile` CLI flag: reports ingest timing and peak memory usage)
-- [ ] Sample datasets & CI fixtures
-- [ ] Config validation
+### Phase C — Safety & Testing (IN PROGRESS)
+- [x] Dry-run mode (--dry-run CLI flag: validates all contracts, prevents state/output writes)
+- [x] Profile mode (--profile CLI flag: reports ingest timing and peak memory usage)
+- [x] Sample datasets & CI fixtures
+- [x] Config validation (rules.json, overrides.csv, splits.csv; hard failure on malformed files, clear error reporting)
 
 ## Quick Start
+## Config Files
+
+Config files live in the `config/` directory:
+- `rules.json` (required): List of objects with `category` and `pattern` (regex, validated on startup)
+- `overrides.csv` (optional): Must have headers `key,category`
+- `splits.csv` (optional): Must have headers `fingerprint,category,amount` (amount must parse as float)
+
+Malformed config files cause hard failure with clear error messages. Missing optional files do not fail unless required for the operation.
+
 
 ```bash
 # Install dependencies
@@ -75,6 +84,9 @@ poetry run pytest -q
 See [docs/dev_workflow.md](docs/dev_workflow.md) for full development instructions.
 
 ## Overlap Detection & Registry
+## Error Handling
+
+All config validation errors are reported with file name and specific details. The CLI exits with a non-zero status on any malformed config file.
 - Overlap detection is implemented in `src/silver_garbanzo/overlap.py` and enforced during ingest.
 - Registry updates are atomic (write temp, replace original).
 - All contract enforcement and overlap logic is covered by tests in `tests/test_contracts.py`.
