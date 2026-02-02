@@ -10,6 +10,40 @@ def main():
     parser.add_argument("--profile", action="store_true", help="Profile ingest performance and memory usage")
     args = parser.parse_args()
 
+    # Validate config files before proceeding
+    from .config_validation import validate_rules_json, validate_overrides_csv, validate_splits_csv
+    config_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "config")
+    errors = []
+    # rules.json (required)
+    rules_path = os.path.join(config_dir, "rules.json")
+    if os.path.exists(rules_path):
+        try:
+            validate_rules_json(rules_path)
+        except Exception as e:
+            errors.append(str(e))
+    else:
+        errors.append("Missing required config: rules.json")
+    # overrides.csv (optional)
+    overrides_path = os.path.join(config_dir, "overrides.csv")
+    if os.path.exists(overrides_path):
+        try:
+            validate_overrides_csv(overrides_path)
+        except Exception as e:
+            errors.append(str(e))
+    # splits.csv (optional)
+    splits_path = os.path.join(config_dir, "splits.csv")
+    if os.path.exists(splits_path):
+        try:
+            validate_splits_csv(splits_path)
+        except Exception as e:
+            errors.append(str(e))
+    # Report errors and exit if any
+    if errors:
+        print("[CONFIG VALIDATION FAILED]")
+        for err in errors:
+            print(f"  - {err}")
+        exit(1)
+
     # Indicate dry-run mode
     if args.dry_run:
         print("[DRY-RUN] No state or output files will be written.")

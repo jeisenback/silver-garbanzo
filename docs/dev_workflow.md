@@ -37,10 +37,11 @@ Branch naming:
 
 4. Update tests when behavior changes
    - Contract changes require tests and sample fixtures
+   - All config validation logic (rules.json, overrides.csv, splits.csv) must be covered by tests
 
 5. Update documentation when behavior/constraints change
    - TR/ESOD updated only when necessary
-   - If a change alters contracts, failure behavior, state semantics, or tooling, add/update an ADR in `docs/decisions/`.
+   - If a change alters contracts, config validation, failure behavior, state semantics, or tooling, add/update an ADR in `docs/decisions/`.
 
 
 6. Open a PR into `dev`
@@ -56,6 +57,10 @@ Branch naming:
 - For features like dry-run mode, create a dedicated feature branch (e.g., `feat/13-dry-run-mode`).
 - Add CLI flags and ensure all contract checks run in dry-run mode, but no state/output files are written.
 - Add tests to verify dry-run logic (no registry writes, all validations run).
+- Add tests to verify config validation logic (malformed config files cause hard failure, clear error reporting).
+## Config Validation Enforcement
+
+Config files in `config/` are validated on CLI startup. Malformed files cause hard failure with clear error messages. All validation logic must be covered by tests.
 - Update documentation to reflect new CLI options and behavior.
 
 - For features like profile mode, create a dedicated feature branch (e.g., `feat/17-profile-mode`).

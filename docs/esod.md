@@ -201,16 +201,27 @@ Fail on malformed names or invalid ranges
 8. Range registry (overlap prevention)
 File
 
+All config files are validated on startup; malformed files cause hard failure with clear error reporting.
 state/ingested_ranges.csv (gitignored)
 
+Config files are loaded from `config/` and validated before any ingest or reporting.
 Schema
 account,start_date,end_date,source_file,ingested_at
-
+Overrides (`config/overrides.csv`, substring; optional, validated if present)
+Rules (`config/rules.json`, ordered regex; required, validated on startup)
 Rules
 
+`config/splits.csv` (optional, validated if present)
 Overlap detection per account
 
-Touching edges allowed
+Hard fail (exit non-zero) on:
+- Invalid filename
+- Missing CSV columns
+- Unparseable dates
+- CSV dates outside filename range
+- Range overlap
+- Unreadable files
+- Malformed config files (rules.json, overrides.csv, splits.csv)
 
 Append only after successful run
 
