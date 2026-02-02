@@ -16,7 +16,7 @@ Mode: Batch CLI only
 Invocation: User-initiated, synchronous execution
 State:
 Persistent state limited to:
-range registry (state/ingested_ranges.csv; schema: account,start_date,end_date,source_file,ingested_at; append after every successful ingest)
+range registry (state/ingested_ranges.csv; schema: account,start_date,end_date,source_file,ingested_at; append after every successful ingest; updates performed via atomic file replace)
 No background processes
 No daemons
 No scheduled jobs

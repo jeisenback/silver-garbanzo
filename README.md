@@ -50,8 +50,8 @@ See [docs/data-layout.md](docs/data-layout.md) for detailed conventions.
 - [x] Validate CSV header schema (Date, Description, Amount, Transaction_Type)
 - [x] Enforce filename-to-CSV date contract
 - [x] Track ingested ranges in local registry
+- [x] Atomic registry updates
 - [ ] Track & prevent overlaps
-- [ ] Atomic registry updates
 
 ### Phase C — Safety & Testing (⏳ PLANNED)
 - [ ] Dry-run mode
