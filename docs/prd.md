@@ -118,6 +118,12 @@ There is no silent fallback.
 - Output clearly indicates dry-run status and what would have changed
 - Used for safe validation and CI
 
+6.5 Profile mode
+
+- CLI flag `--profile` reports ingest timing and peak memory usage
+- Used for diagnostics, performance tuning, and CI
+- Output includes elapsed time and peak memory
+
 7. Overlap prevention (MVP approach)
 7.1 Range registry
 

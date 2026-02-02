@@ -58,6 +58,11 @@ Branch naming:
 - Add tests to verify dry-run logic (no registry writes, all validations run).
 - Update documentation to reflect new CLI options and behavior.
 
+- For features like profile mode, create a dedicated feature branch (e.g., `feat/17-profile-mode`).
+- Add CLI flags and ensure profiling logic (timing, memory usage) is integrated and tested.
+- Add tests to verify profile output.
+- Update documentation to reflect new CLI options and behavior.
+
 ---
 
 ## Merging to main

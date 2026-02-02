@@ -55,7 +55,7 @@ See [docs/data-layout.md](docs/data-layout.md) for detailed conventions.
 
 ### Phase C — Safety & Testing (⏳ IN PROGRESS)
 - [x] Dry-run mode (`--dry-run` CLI flag: validates all contracts, prevents state/output writes)
-- [ ] Profile mode
+- [x] Profile mode (`--profile` CLI flag: reports ingest timing and peak memory usage)
 - [ ] Sample datasets & CI fixtures
 - [ ] Config validation
 
