@@ -67,6 +67,16 @@ Config files live in the `config/` directory:
 - `overrides.csv` (optional): Must have headers `key,category`
 - `splits.csv` (optional): Must have headers `fingerprint,category,amount` (amount must parse as float)
 
+
+### Environment Variable Override
+
+You can override the config directory location by setting the environment variable `SILVER_GARBANZO_CONFIG_DIR`. This is useful for testing and CI:
+
+```bash
+export SILVER_GARBANZO_CONFIG_DIR=/path/to/custom/config
+poetry run python -m silver_garbanzo.cli data/sample/checking__2026-01.csv --dry-run
+```
+
 Malformed config files cause hard failure with clear error messages. Missing optional files do not fail unless required for the operation.
 
 
