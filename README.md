@@ -51,7 +51,7 @@ See [docs/data-layout.md](docs/data-layout.md) for detailed conventions.
 - [x] Enforce filename-to-CSV date contract
 - [x] Track ingested ranges in local registry
 - [x] Atomic registry updates
-- [ ] Track & prevent overlaps
+- [x] Track & prevent overlaps (see `src/silver_garbanzo/overlap.py`)
 
 ### Phase C — Safety & Testing (⏳ PLANNED)
 - [ ] Dry-run mode
@@ -73,6 +73,11 @@ poetry run pytest -q
 ```
 
 See [docs/dev_workflow.md](docs/dev_workflow.md) for full development instructions.
+
+## Overlap Detection & Registry
+- Overlap detection is implemented in `src/silver_garbanzo/overlap.py` and enforced during ingest.
+- Registry updates are atomic (write temp, replace original).
+- All contract enforcement and overlap logic is covered by tests in `tests/test_contracts.py`.
 
 ## References
 - [ESOD v3](docs/esod.md) — Complete system design

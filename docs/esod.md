@@ -130,36 +130,28 @@ normalize.py
 
 Date parsing
 
-Amount parsing
-
-Transaction_Type sign mapping
-
-Description cleanup
-
-Fingerprint generation
-
+contracts.py
+	- Filename parsing
+	- Date range validation
+	- Registry read/write (atomic)
+overlap.py
+	- Range overlap detection (pure function, tested)
+normalize.py
+	- Date parsing
+	- Amount parsing
+	- Transaction_Type sign mapping
+	- Description cleanup
+	- Fingerprint generation
 categorize.py
-
-Load rules
-
-Load overrides
-
-Apply category precedence
-
+	- Load rules
+	- Load overrides
+	- Apply category precedence
 splits.py
-
-Load splits
-
-Replace original rows for reporting
-
-Validate split totals (warn)
-
+	- Load splits
+	- Replace original rows for reporting
+	- Validate split totals (warn)
 report.py
-
-Period totals
-
-Period+category breakdown
-
+	- Period totals
 Uncategorized listing
 
 CSV export

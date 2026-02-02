@@ -241,3 +241,63 @@ def test_append_range_registry_atomic(tmp_path):
             datetime.strptime(r[4], "%Y-%m-%dT%H:%M:%SZ")
         except Exception:
             pytest.fail("ingested_at is not ISO8601 UTC")
+
+
+class TestRangeOverlap:
+    def test_no_overlap(self, tmp_path):
+        from silver_garbanzo.contracts import append_range_registry
+        from silver_garbanzo.overlap import check_range_overlap
+        from datetime import datetime
+        account = "checking"
+        start1 = datetime(2026, 1, 1)
+        end1 = datetime(2026, 1, 31)
+        start2 = datetime(2026, 2, 1)
+        end2 = datetime(2026, 2, 28)
+        registry_path = tmp_path / "ingested_ranges.csv"
+        append_range_registry(account, start1, end1, "checking__2026-01.csv", str(registry_path))
+        # Should not raise
+        check_range_overlap(account, start2, end2, str(registry_path))
+
+    def test_overlap(self, tmp_path):
+        from silver_garbanzo.contracts import append_range_registry
+        from silver_garbanzo.overlap import check_range_overlap
+        from datetime import datetime
+        account = "checking"
+        start1 = datetime(2026, 1, 1)
+        end1 = datetime(2026, 1, 31)
+        start2 = datetime(2026, 1, 15)
+        end2 = datetime(2026, 2, 10)
+        registry_path = tmp_path / "ingested_ranges.csv"
+        append_range_registry(account, start1, end1, "checking__2026-01.csv", str(registry_path))
+        import pytest
+        with pytest.raises(ValueError, match="overlaps existing range"):
+            check_range_overlap(account, start2, end2, str(registry_path))
+
+    def test_touching_edges(self, tmp_path):
+        from silver_garbanzo.contracts import append_range_registry
+        from silver_garbanzo.overlap import check_range_overlap
+        from datetime import datetime
+        account = "checking"
+        start1 = datetime(2026, 1, 1)
+        end1 = datetime(2026, 1, 31)
+        start2 = datetime(2026, 2, 1)
+        end2 = datetime(2026, 2, 28)
+        registry_path = tmp_path / "ingested_ranges.csv"
+        append_range_registry(account, start1, end1, "checking__2026-01.csv", str(registry_path))
+        # Should not raise (touching edge)
+        check_range_overlap(account, start2, end2, str(registry_path))
+
+    def test_different_account(self, tmp_path):
+        from silver_garbanzo.contracts import append_range_registry
+        from silver_garbanzo.overlap import check_range_overlap
+        from datetime import datetime
+        account1 = "checking"
+        account2 = "savings"
+        start1 = datetime(2026, 1, 1)
+        end1 = datetime(2026, 1, 31)
+        start2 = datetime(2026, 1, 15)
+        end2 = datetime(2026, 2, 10)
+        registry_path = tmp_path / "ingested_ranges.csv"
+        append_range_registry(account1, start1, end1, "checking__2026-01.csv", str(registry_path))
+        # Should not raise (different account)
+        check_range_overlap(account2, start2, end2, str(registry_path))

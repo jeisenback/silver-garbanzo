@@ -169,3 +169,4 @@ def append_range_registry(account: str, start_date: datetime, end_date: datetime
         temp_path = tf.name
     # Atomically replace registry
     os.replace(temp_path, registry_path)
+
