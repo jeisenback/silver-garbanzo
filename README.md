@@ -18,5 +18,63 @@ Real financial data is never committed to this repository.
 - Use `data/sample/` for synthetic/redacted fixtures (committed later)
 - Local ingest state lives in `state/` (gitignored)
 
+See [docs/data-layout.md](docs/data-layout.md) for detailed conventions.
+
+## Documentation
+
+### Core References
+- **[ESOD v3](docs/esod.md)** — Engineering solution & architecture
+- **[PRD](docs/prd.md)** — Product requirements & user context
+- **[Technical Requirements](docs/technical_requirements.md)** — Implementation constraints
+
+### Workflow & Development
+- **[Development Workflow](docs/dev_workflow.md)** — Branching, PRs, CI gates
+- **[Data Layout](docs/data-layout.md)** — Directory structure & safety rules
+- **[Copilot Instructions](docs/copilot_instructions.md)** — AI assistant guidelines
+
+### Decisions & Operations
+- **[Architecture Decision Records](docs/decisions/)** — Design decisions (ADRs)
+- **[Run Log Template](docs/run-log.md)** — Manual ingestion audit trail
+
 ## Status
-Bootstrapping. No ingestion logic implemented yet.
+
+### Phase A — Foundation (✅ COMPLETE)
+- [x] Repository skeleton & branch strategy
+- [x] Python runtime & dependencies pinned
+- [x] CI workflow (placeholder lint/test)
+- [x] ADR framework & documentation discipline
+- [x] Data layout & safety conventions
+
+### Phase B — Ingest Contract (🔄 IN PROGRESS)
+- [ ] Parse date range from filename
+- [ ] Validate CSV header schema
+- [ ] Enforce filename-to-CSV date contract
+- [ ] Track & prevent overlaps
+- [ ] Atomic registry updates
+
+### Phase C — Safety & Testing (⏳ PLANNED)
+- [ ] Dry-run mode
+- [ ] Profile mode
+- [ ] Sample datasets & CI fixtures
+- [ ] Config validation
+
+## Quick Start
+
+```bash
+# Install dependencies
+poetry install
+
+# Run lint
+poetry run ruff check .
+
+# Run tests
+poetry run pytest -q
+```
+
+See [docs/dev_workflow.md](docs/dev_workflow.md) for full development instructions.
+
+## References
+- [ESOD v3](docs/esod.md) — Complete system design
+- [Epic breakdown](docs/epics.md) — Release planning
+- [Branch strategy](docs/dev_workflow.md#branching) — Git workflow
+
