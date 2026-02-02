@@ -1,3 +1,34 @@
+def make_rows(dates):
+    return [{"Date": d, "Description": "desc", "Amount": "1.0", "Transaction_Type": "DEBIT"} for d in dates]
+
+class TestValidateCSVDateRange:
+    def test_all_dates_in_range(self):
+        from silver_garbanzo.contracts import validate_csv_date_range
+        from datetime import datetime
+        rows = make_rows(["2026-01-01", "2026-01-15", "2026-01-31"])
+        start = datetime(2026, 1, 1)
+        end = datetime(2026, 1, 31)
+        validate_csv_date_range(rows, start, end)
+
+    def test_date_out_of_range(self):
+        from silver_garbanzo.contracts import validate_csv_date_range
+        from datetime import datetime
+        rows = make_rows(["2026-01-01", "2026-02-01", "2026-01-31"])
+        start = datetime(2026, 1, 1)
+        end = datetime(2026, 1, 31)
+        import pytest
+        with pytest.raises(ValueError, match="outside filename-declared range"):
+            validate_csv_date_range(rows, start, end)
+
+    def test_invalid_date_format(self):
+        from silver_garbanzo.contracts import validate_csv_date_range
+        from datetime import datetime
+        rows = make_rows(["2026-01-01", "bad-date", "2026-01-31"])
+        start = datetime(2026, 1, 1)
+        end = datetime(2026, 1, 31)
+        import pytest
+        with pytest.raises(ValueError, match="Invalid date format"):
+            validate_csv_date_range(rows, start, end)
 """
 test_contracts.py — Tests for filename and contract validation.
 """

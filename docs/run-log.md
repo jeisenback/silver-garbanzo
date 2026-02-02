@@ -27,7 +27,7 @@ Use this template to record a manual ingestion run. Each run should be appended 
 
 - **Validation checks performed:**
   - Header validation: passed/failed
-  - Date parsing: passed/failed
+  - Date parsing (filename range): passed/failed
   - Amount normalization: passed/failed
   - Split totals match original: yes/no (if no, explain)
 

@@ -46,9 +46,9 @@ See [docs/data-layout.md](docs/data-layout.md) for detailed conventions.
 - [x] Data layout & safety conventions
 
 ### Phase B — Ingest Contract (🔄 IN PROGRESS)
-- [ ] Parse date range from filename
-- [ ] Validate CSV header schema
-- [ ] Enforce filename-to-CSV date contract
+- [x] Parse date range from filename
+- [x] Validate CSV header schema (Date, Description, Amount, Transaction_Type)
+- [x] Enforce filename-to-CSV date contract
 - [ ] Track & prevent overlaps
 - [ ] Atomic registry updates
 

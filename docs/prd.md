@@ -96,7 +96,8 @@ checking__2026-01-15__2026-02-14.csv
 
 The ingest fails if any of the following are true:
 
-Filename does not match a supported pattern
+- Filename does not match a supported pattern
+- Any CSV date falls outside the filename-declared range (hard fail)
 
 CSV contains dates outside the declared filename range
 
