@@ -46,6 +46,8 @@ safety mechanism for ingest operations.
 """
 
 import re
+import csv
+import os
 from datetime import datetime
 from typing import NamedTuple
 
@@ -132,3 +134,25 @@ def parse_filename_range(filename: str) -> FilenameRange:
         f"Expected: <account>__YYYY-MM.csv or "
         f"<account>__YYYY-MM-DD__YYYY-MM-DD.csv"
     )
+
+def append_range_registry(account: str, start_date: datetime, end_date: datetime, source_file: str, registry_path: str = None) -> None:
+    """
+    Append a successfully ingested range to the registry CSV.
+    Args:
+        account: Account name
+        start_date: Range start (datetime)
+        end_date: Range end (datetime)
+        source_file: Source filename
+        registry_path: Path to registry CSV (default: state/ingested_ranges.csv)
+    """
+    if registry_path is None:
+        registry_path = os.path.join(os.path.dirname(__file__), '..', '..', 'state', 'ingested_ranges.csv')
+        registry_path = os.path.normpath(registry_path)
+    ingested_at = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+    row = [account, start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'), source_file, ingested_at]
+    file_exists = os.path.isfile(registry_path)
+    with open(registry_path, 'a', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        if not file_exists:
+            writer.writerow(['account', 'start_date', 'end_date', 'source_file', 'ingested_at'])
+        writer.writerow(row)

@@ -185,3 +185,29 @@ class TestParseFilenameRangeReturnType:
         assert isinstance(result.start_date, datetime)
         assert isinstance(result.end_date, datetime)
         assert isinstance(result.filename, str)
+
+
+def test_append_range_registry(tmp_path):
+    from silver_garbanzo.contracts import append_range_registry
+    import csv
+    import os
+    from datetime import datetime
+    account = "checking"
+    start_date = datetime(2026, 1, 1)
+    end_date = datetime(2026, 1, 31)
+    source_file = "checking__2026-01.csv"
+    registry_path = tmp_path / "ingested_ranges.csv"
+    append_range_registry(account, start_date, end_date, source_file, str(registry_path))
+    # Check file exists and has correct row
+    assert os.path.isfile(registry_path)
+    with open(registry_path, newline="", encoding="utf-8") as f:
+        reader = csv.reader(f)
+        rows = list(reader)
+    assert rows[0] == ["account", "start_date", "end_date", "source_file", "ingested_at"]
+    assert rows[1][:4] == [account, "2026-01-01", "2026-01-31", source_file]
+    # ingested_at is ISO8601 UTC
+    try:
+        datetime.strptime(rows[1][4], "%Y-%m-%dT%H:%M:%SZ")
+    except Exception:
+        import pytest
+        pytest.fail("ingested_at is not ISO8601 UTC")

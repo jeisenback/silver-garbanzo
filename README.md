@@ -48,8 +48,8 @@ See [docs/data-layout.md](docs/data-layout.md) for detailed conventions.
 ### Phase B — Ingest Contract (🔄 IN PROGRESS)
 - [x] Parse date range from filename
 - [x] Validate CSV header schema (Date, Description, Amount, Transaction_Type)
-<<<<<<< HEAD
-	- [x] Enforce filename-to-CSV date contract
+- [x] Enforce filename-to-CSV date contract
+- [x] Track ingested ranges in local registry
 - [ ] Track & prevent overlaps
 - [ ] Atomic registry updates
 

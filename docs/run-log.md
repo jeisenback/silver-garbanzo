@@ -33,7 +33,7 @@ Use this template to record a manual ingestion run. Each run should be appended 
   - Split totals match original: yes/no (if no, explain)
 
 - **Post-run actions:**
-  - `state/ingested_ranges.csv` appended: yes/no
+  - `state/ingested_ranges.csv` appended: yes/no (audit registry for all prior ingests)
   - Exports written to: `state/exports/run-YYYY-MM-DD.csv`
   - PR/Issue created for manual follow-up: #[number]
 

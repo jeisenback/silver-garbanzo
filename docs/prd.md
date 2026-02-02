@@ -122,6 +122,8 @@ Schema:
 
 account,start_date,end_date,source_file,ingested_at
 
+Registry is appended after every successful ingest and serves as the audit trail for all ingested ranges.
+
 7.2 Overlap definition
 
 Two ranges overlap if:
