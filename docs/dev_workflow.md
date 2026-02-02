@@ -39,8 +39,9 @@ Branch naming:
    - Contract changes require tests and sample fixtures
 
 5. Update documentation when behavior/constraints change
-   - ADR required for non-obvious behavior changes
    - TR/ESOD updated only when necessary
+   - If a change alters contracts, failure behavior, state semantics, or tooling, add/update an ADR in `docs/decisions/`.
+
 
 6. Open a PR into `dev`
    - Use the PR template checkboxes honestly
