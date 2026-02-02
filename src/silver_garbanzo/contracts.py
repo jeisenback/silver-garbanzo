@@ -1,3 +1,21 @@
+REQUIRED_HEADERS = ["Date", "Description", "Amount", "Transaction_Type"]
+
+def validate_csv_headers(headers: list[str]) -> None:
+    """
+    Validate that the CSV headers match the required schema.
+    Args:
+        headers: List of header strings from the CSV file.
+    Raises:
+        ValueError: If required headers are missing or extra headers are present.
+    """
+    missing = [h for h in REQUIRED_HEADERS if h not in headers]
+    if missing:
+        raise ValueError(f"Missing required header(s): {missing}. Required: {REQUIRED_HEADERS}")
+    # Optionally, enforce no extra headers (strict schema)
+    # extra = [h for h in headers if h not in REQUIRED_HEADERS]
+    # if extra:
+    #     raise ValueError(f"Unexpected header(s): {extra}. Required: {REQUIRED_HEADERS}")
+
 def validate_csv_date_range(rows: list[dict], start_date, end_date) -> None:
     """
     Validate that all dates in the CSV fall within the declared filename range.
@@ -19,6 +37,7 @@ def validate_csv_date_range(rows: list[dict], start_date, end_date) -> None:
             out_of_range.append((i+1, row["Date"]))
     if out_of_range:
         raise ValueError(f"CSV contains dates outside filename-declared range: {out_of_range}")
+
 """
 contracts.py — Filename and data contract validation.
 

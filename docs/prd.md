@@ -60,8 +60,12 @@ Re-run
 No background jobs. No daemons.
 
 6. Input contract (critical)
-6.1 Required CSV header
-Date,Description,Amount,Transaction_Type
+6.1 Required CSV header (enforced)
+The following headers are required and validated for every ingest:
+
+	Date,Description,Amount,Transaction_Type
+
+If any are missing, the ingest fails immediately with a clear error message.
 
 6.2 Filename contract (hard requirement)
 

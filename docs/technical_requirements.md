@@ -66,16 +66,16 @@ Performance optimizations must not reduce correctness or clarity.
 6. Error handling & exits
 6.1 Hard failures (non-zero exit)
 The system must fail immediately and clearly when:
-Filename contract is invalid
-Required CSV headers are missing
-Dates cannot be parsed
-CSV dates exceed filename-declared range (hard fail)
-Ingested range overlaps prior ingested range
-Required config files are malformed
+- Filename contract is invalid
+- Required CSV headers are missing (Date, Description, Amount, Transaction_Type)
+- Dates cannot be parsed
+- CSV dates exceed filename-declared range (hard fail)
+- Ingested range overlaps prior ingested range
+- Required config files are malformed
 Error messages must include:
-File name
-Expected vs actual values
-Actionable guidance where possible
+- File name
+- Expected vs actual values
+- Actionable guidance where possible
 
 6.2 Warnings (exit zero)
 Warnings are allowed (and expected) for:
@@ -136,5 +136,11 @@ An ADR
 A clear justification tied to correctness, safety, or maintainability
 
 Updated tests demonstrating compliance
+
+## Related ADRs
+- [0001](decisions/0001-use-poetry-and-ruff.md)
+- [0002](decisions/0002-correctness-first-ingest.md)
+- [0005](decisions/0005-local-single-user.md)
+
 
 End of Technical Requirements

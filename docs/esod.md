@@ -112,6 +112,9 @@ returns a DataFrame + warnings
 
 does not perform I/O unless it is an edge stage
 
+**Related ADRs:** [0002](decisions/0002-correctness-first-ingest.md), [0005](decisions/0005-local-single-user.md)
+
+
 5. Module responsibilities (SRP boundaries)
 contracts.py
 
@@ -416,3 +419,5 @@ ADR framework present
 Run-log template present
 
 Registry records source files and timestamps
+
+**Related ADRs:** [0002](decisions/0002-correctness-first-ingest.md), [0003](decisions/0003-filename-date-range-contract.md)
