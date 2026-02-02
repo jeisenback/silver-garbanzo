@@ -26,7 +26,7 @@ Use this template to record a manual ingestion run. Each run should be appended 
   - `splits.csv` updated: fingerprint `abc123` split into 2 rows (total preserved)
 
 - **Validation checks performed:**
-  - Header validation: passed/failed
+  - Header validation (Date, Description, Amount, Transaction_Type): passed/failed
   - Date parsing: passed/failed
   - Amount normalization: passed/failed
   - Split totals match original: yes/no (if no, explain)
