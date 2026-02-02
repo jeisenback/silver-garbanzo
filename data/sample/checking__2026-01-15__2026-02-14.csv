@@ -1,0 +1,5 @@
+# Sample explicit range file for contract validation
+Date,Description,Amount,Transaction_Type
+2026-01-15,Test Grocery,-30.00,DEBIT
+2026-01-20,Test Income,500.00,CREDIT
+2026-02-14,Test Utility,-40.00,DEBIT

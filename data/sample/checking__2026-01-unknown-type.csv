@@ -1,0 +1,5 @@
+# Unknown Transaction_Type scenario
+Date,Description,Amount,Transaction_Type
+2026-01-05,Test Grocery,-15.00,DEBIT
+2026-01-10,Test Refund,20.00,REFUND
+2026-01-20,Test Utility,-30.00,DEBIT

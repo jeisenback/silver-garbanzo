@@ -1,0 +1,5 @@
+# Overlap scenario: two ranges for same account that overlap
+Date,Description,Amount,Transaction_Type
+2026-01-15,Test Grocery,-25.00,DEBIT
+2026-01-20,Test Income,400.00,CREDIT
+2026-01-31,Test Utility,-35.00,DEBIT
