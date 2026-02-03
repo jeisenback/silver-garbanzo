@@ -1,7 +1,15 @@
-import json
+
+"""
+config_validation.py — Config and CSV validation.
+
+This module provides functions to validate configuration files and CSVs used by the system.
+It ensures that config files and data files conform to expected schemas and formats.
+"""
+
 import csv
+import json
 import re
-import os
+
 
 def validate_rules_json(path):
     try:

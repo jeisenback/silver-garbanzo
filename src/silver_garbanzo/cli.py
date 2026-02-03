@@ -1,7 +1,18 @@
+
+"""
+cli.py — Command-line interface entry point.
+
+This module provides the CLI for Silver Garbanzo, handling argument parsing, config validation,
+and invoking the ingestion process. It is the user-facing entry point for all operations.
+"""
+
 import argparse
+import os
 import time
 import tracemalloc
+
 from .ingest import ingest
+
 
 def main():
     parser = argparse.ArgumentParser(description="Silver Garbanzo CLI")
@@ -11,8 +22,10 @@ def main():
     args = parser.parse_args()
 
     # Validate config files before proceeding
-    from .config_validation import validate_rules_json, validate_overrides_csv, validate_splits_csv
-    config_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "config")
+    from .config_validation import validate_overrides_csv, validate_rules_json, validate_splits_csv
+    config_dir = os.environ.get("SILVER_GARBANZO_CONFIG_DIR")
+    if not config_dir:
+        config_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "config")
     errors = []
     # rules.json (required)
     rules_path = os.path.join(config_dir, "rules.json")

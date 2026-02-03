@@ -1,8 +1,7 @@
-import os
-import tempfile
 import pandas as pd
-import pytest
+
 from silver_garbanzo.ingest import ingest
+
 
 def make_sample_csv(path, dates):
     df = pd.DataFrame({

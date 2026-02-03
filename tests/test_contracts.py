@@ -3,16 +3,18 @@ def make_rows(dates):
 
 class TestValidateCSVDateRange:
     def test_all_dates_in_range(self):
-        from silver_garbanzo.contracts import validate_csv_date_range
         from datetime import datetime
+
+        from silver_garbanzo.contracts import validate_csv_date_range
         rows = make_rows(["2026-01-01", "2026-01-15", "2026-01-31"])
         start = datetime(2026, 1, 1)
         end = datetime(2026, 1, 31)
         validate_csv_date_range(rows, start, end)
 
     def test_date_out_of_range(self):
-        from silver_garbanzo.contracts import validate_csv_date_range
         from datetime import datetime
+
+        from silver_garbanzo.contracts import validate_csv_date_range
         rows = make_rows(["2026-01-01", "2026-02-01", "2026-01-31"])
         start = datetime(2026, 1, 1)
         end = datetime(2026, 1, 31)
@@ -21,8 +23,9 @@ class TestValidateCSVDateRange:
             validate_csv_date_range(rows, start, end)
 
     def test_invalid_date_format(self):
-        from silver_garbanzo.contracts import validate_csv_date_range
         from datetime import datetime
+
+        from silver_garbanzo.contracts import validate_csv_date_range
         rows = make_rows(["2026-01-01", "bad-date", "2026-01-31"])
         start = datetime(2026, 1, 1)
         end = datetime(2026, 1, 31)
@@ -188,10 +191,11 @@ class TestParseFilenameRangeReturnType:
 
 
 def test_append_range_registry(tmp_path):
-    from silver_garbanzo.contracts import append_range_registry
     import csv
     import os
     from datetime import datetime
+
+    from silver_garbanzo.contracts import append_range_registry
     account = "checking"
     start_date = datetime(2026, 1, 1)
     end_date = datetime(2026, 1, 31)
@@ -214,10 +218,11 @@ def test_append_range_registry(tmp_path):
 
 
 def test_append_range_registry_atomic(tmp_path):
-    from silver_garbanzo.contracts import append_range_registry
     import csv
     import os
     from datetime import datetime
+
+    from silver_garbanzo.contracts import append_range_registry
     account = "checking"
     start_date = datetime(2026, 1, 1)
     end_date = datetime(2026, 1, 31)
@@ -245,9 +250,10 @@ def test_append_range_registry_atomic(tmp_path):
 
 class TestRangeOverlap:
     def test_no_overlap(self, tmp_path):
+        from datetime import datetime
+
         from silver_garbanzo.contracts import append_range_registry
         from silver_garbanzo.overlap import check_range_overlap
-        from datetime import datetime
         account = "checking"
         start1 = datetime(2026, 1, 1)
         end1 = datetime(2026, 1, 31)
@@ -259,9 +265,10 @@ class TestRangeOverlap:
         check_range_overlap(account, start2, end2, str(registry_path))
 
     def test_overlap(self, tmp_path):
+        from datetime import datetime
+
         from silver_garbanzo.contracts import append_range_registry
         from silver_garbanzo.overlap import check_range_overlap
-        from datetime import datetime
         account = "checking"
         start1 = datetime(2026, 1, 1)
         end1 = datetime(2026, 1, 31)
@@ -274,9 +281,10 @@ class TestRangeOverlap:
             check_range_overlap(account, start2, end2, str(registry_path))
 
     def test_touching_edges(self, tmp_path):
+        from datetime import datetime
+
         from silver_garbanzo.contracts import append_range_registry
         from silver_garbanzo.overlap import check_range_overlap
-        from datetime import datetime
         account = "checking"
         start1 = datetime(2026, 1, 1)
         end1 = datetime(2026, 1, 31)
@@ -288,9 +296,10 @@ class TestRangeOverlap:
         check_range_overlap(account, start2, end2, str(registry_path))
 
     def test_different_account(self, tmp_path):
+        from datetime import datetime
+
         from silver_garbanzo.contracts import append_range_registry
         from silver_garbanzo.overlap import check_range_overlap
-        from datetime import datetime
         account1 = "checking"
         account2 = "savings"
         start1 = datetime(2026, 1, 1)

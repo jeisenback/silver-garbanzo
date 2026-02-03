@@ -1,7 +1,25 @@
-import pandas as pd
-from .contracts import validate_csv_headers, validate_csv_date_range, parse_filename_range, append_range_registry
-from .overlap import check_range_overlap
+
+"""
+ingest.py — Ingestion orchestration.
+
+This module coordinates the ingestion process, including loading CSVs, validating
+headers and date ranges, checking for overlaps, and updating the registry. It acts as
+the main entry point for ingest operations, delegating validation and contract logic to
+other modules.
+"""
+
 import os
+
+import pandas as pd
+
+from .contracts import (
+    append_range_registry,
+    parse_filename_range,
+    validate_csv_date_range,
+    validate_csv_headers,
+)
+from .overlap import check_range_overlap
+
 
 def ingest(csv_path, dry_run=False, registry_path=None):
     filename = os.path.basename(csv_path)

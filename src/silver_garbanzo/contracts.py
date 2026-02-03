@@ -1,3 +1,21 @@
+
+"""
+contracts.py — Data and filename contract validation.
+
+This module implements the filename-based date range contract and CSV schema validation.
+It provides functions for validating headers, date ranges, and filename formats, and for
+appending ingested ranges to the registry. All logic here is focused on enforcing data
+contracts and safety for ingest operations.
+"""
+
+
+import csv
+import os
+import re
+from datetime import datetime, timedelta
+from typing import NamedTuple
+import tempfile
+
 REQUIRED_HEADERS = ["Date", "Description", "Amount", "Transaction_Type"]
 
 def validate_csv_headers(headers: list[str]) -> None:
@@ -26,7 +44,6 @@ def validate_csv_date_range(rows: list[dict], start_date, end_date) -> None:
     Raises:
         ValueError: If any row's date is outside the allowed range.
     """
-    from datetime import datetime
     out_of_range = []
     for i, row in enumerate(rows):
         try:
@@ -45,9 +62,9 @@ Implements the filename-based date range contract that is the primary
 safety mechanism for ingest operations.
 """
 
-import re
 import csv
 import os
+import re
 from datetime import datetime
 from typing import NamedTuple
 
@@ -94,7 +111,6 @@ def parse_filename_range(filename: str) -> FilenameRange:
             else:
                 end_date = datetime(int(year), int(month) + 1, 1)
             # Subtract one day from end_date to get the last day of the month
-            from datetime import timedelta
             end_date = end_date - timedelta(days=1)
             
             return FilenameRange(
@@ -146,12 +162,20 @@ def append_range_registry(account: str, start_date: datetime, end_date: datetime
         registry_path: Path to registry CSV (default: state/ingested_ranges.csv)
     """
     if registry_path is None:
-        registry_path = os.path.join(os.path.dirname(__file__), '..', '..', 'state', 'ingested_ranges.csv')
+        registry_path = os.path.join(
+            os.path.dirname(__file__), '..', '..', 'state', 'ingested_ranges.csv'
+        )
         registry_path = os.path.normpath(registry_path)
     state_dir = os.path.dirname(registry_path)
     os.makedirs(state_dir, exist_ok=True)
     ingested_at = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
-    row = [account, start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'), source_file, ingested_at]
+    row = [
+        account,
+        start_date.strftime('%Y-%m-%d'),
+        end_date.strftime('%Y-%m-%d'),
+        source_file,
+        ingested_at,
+    ]
     # Read existing rows
     rows = []
     if os.path.isfile(registry_path):
@@ -162,8 +186,9 @@ def append_range_registry(account: str, start_date: datetime, end_date: datetime
         rows = [['account', 'start_date', 'end_date', 'source_file', 'ingested_at']]
     rows.append(row)
     # Write to temp file
-    import tempfile
-    with tempfile.NamedTemporaryFile('w', delete=False, dir=state_dir, newline='', encoding='utf-8') as tf:
+    with tempfile.NamedTemporaryFile(
+        'w', delete=False, dir=state_dir, newline='', encoding='utf-8'
+    ) as tf:
         writer = csv.writer(tf)
         writer.writerows(rows)
         temp_path = tf.name
