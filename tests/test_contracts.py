@@ -1,46 +1,29 @@
-def make_rows(dates):
-    return [{"Date": d, "Description": "desc", "Amount": "1.0", "Transaction_Type": "DEBIT"} for d in dates]
 
-class TestValidateCSVDateRange:
-    def test_all_dates_in_range(self):
-        from datetime import datetime
-
-        from silver_garbanzo.contracts import validate_csv_date_range
-        rows = make_rows(["2026-01-01", "2026-01-15", "2026-01-31"])
-        start = datetime(2026, 1, 1)
-        end = datetime(2026, 1, 31)
-        validate_csv_date_range(rows, start, end)
-
-    def test_date_out_of_range(self):
-        from datetime import datetime
-
-        from silver_garbanzo.contracts import validate_csv_date_range
-        rows = make_rows(["2026-01-01", "2026-02-01", "2026-01-31"])
-        start = datetime(2026, 1, 1)
-        end = datetime(2026, 1, 31)
-        import pytest
-        with pytest.raises(ValueError, match="outside filename-declared range"):
-            validate_csv_date_range(rows, start, end)
-
-    def test_invalid_date_format(self):
-        from datetime import datetime
-
-        from silver_garbanzo.contracts import validate_csv_date_range
-        rows = make_rows(["2026-01-01", "bad-date", "2026-01-31"])
-        start = datetime(2026, 1, 1)
-        end = datetime(2026, 1, 31)
-        import pytest
-        with pytest.raises(ValueError, match="Invalid date format"):
-            validate_csv_date_range(rows, start, end)
-"""
-test_contracts.py — Tests for filename and contract validation.
-"""
-
+import csv
+import os
 from datetime import datetime
 
 import pytest
 
-from silver_garbanzo.contracts import FilenameRange, parse_filename_range
+from silver_garbanzo.contracts import (
+    FilenameRange,
+    append_range_registry,
+    parse_filename_range,
+)
+
+
+def make_rows(dates):
+    return [
+        {
+            "Date": d,
+            "Description": "desc",
+            "Amount": "1.0",
+            "Transaction_Type": "DEBIT",
+        }
+        for d in dates
+    ]
+
+
 
 
 class TestParseFilenameRangeMonthly:
@@ -191,11 +174,6 @@ class TestParseFilenameRangeReturnType:
 
 
 def test_append_range_registry(tmp_path):
-    import csv
-    import os
-    from datetime import datetime
-
-    from silver_garbanzo.contracts import append_range_registry
     account = "checking"
     start_date = datetime(2026, 1, 1)
     end_date = datetime(2026, 1, 31)
@@ -213,16 +191,10 @@ def test_append_range_registry(tmp_path):
     try:
         datetime.strptime(rows[1][4], "%Y-%m-%dT%H:%M:%SZ")
     except Exception:
-        import pytest
         pytest.fail("ingested_at is not ISO8601 UTC")
 
 
 def test_append_range_registry_atomic(tmp_path):
-    import csv
-    import os
-    from datetime import datetime
-
-    from silver_garbanzo.contracts import append_range_registry
     account = "checking"
     start_date = datetime(2026, 1, 1)
     end_date = datetime(2026, 1, 31)
@@ -231,7 +203,13 @@ def test_append_range_registry_atomic(tmp_path):
     # Write initial row
     append_range_registry(account, start_date, end_date, source_file, str(registry_path))
     # Write second row
-    append_range_registry("savings", start_date, end_date, "savings__2026-01.csv", str(registry_path))
+    append_range_registry(
+        "savings",
+        start_date,
+        end_date,
+        "savings__2026-01.csv",
+        str(registry_path),
+    )
     # Check file exists and has both rows
     assert os.path.isfile(registry_path)
     with open(registry_path, newline="", encoding="utf-8") as f:
@@ -252,7 +230,6 @@ class TestRangeOverlap:
     def test_no_overlap(self, tmp_path):
         from datetime import datetime
 
-        from silver_garbanzo.contracts import append_range_registry
         from silver_garbanzo.overlap import check_range_overlap
         account = "checking"
         start1 = datetime(2026, 1, 1)
@@ -267,7 +244,6 @@ class TestRangeOverlap:
     def test_overlap(self, tmp_path):
         from datetime import datetime
 
-        from silver_garbanzo.contracts import append_range_registry
         from silver_garbanzo.overlap import check_range_overlap
         account = "checking"
         start1 = datetime(2026, 1, 1)
@@ -283,7 +259,6 @@ class TestRangeOverlap:
     def test_touching_edges(self, tmp_path):
         from datetime import datetime
 
-        from silver_garbanzo.contracts import append_range_registry
         from silver_garbanzo.overlap import check_range_overlap
         account = "checking"
         start1 = datetime(2026, 1, 1)
@@ -298,7 +273,6 @@ class TestRangeOverlap:
     def test_different_account(self, tmp_path):
         from datetime import datetime
 
-        from silver_garbanzo.contracts import append_range_registry
         from silver_garbanzo.overlap import check_range_overlap
         account1 = "checking"
         account2 = "savings"
