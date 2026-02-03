@@ -66,7 +66,12 @@ def test_different_account(tmp_path):
     def test_no_registry_file(tmp_path):
         # Should not raise if registry file does not exist
         missing_registry = tmp_path / 'does_not_exist.csv'
-        check_range_overlap('checking', datetime(2026,1,1), datetime(2026,1,31), str(missing_registry))
+        check_range_overlap(
+            'checking',
+            datetime(2026, 1, 1),
+            datetime(2026, 1, 31),
+            str(missing_registry),
+        )
 
     def test_default_registry_path(monkeypatch, tmp_path):
         # Patch os.path.join and os.path.normpath to use a temp file
