@@ -31,13 +31,13 @@ def main():
     )
     args = parser.parse_args()
 
-    # Validate config files before proceeding
+    # Validate config files before proceeding (fail fast if any are missing or malformed)
     from .config_validation import validate_overrides_csv, validate_rules_json, validate_splits_csv
     config_dir = os.environ.get("SILVER_GARBANZO_CONFIG_DIR")
     if not config_dir:
         config_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "config")
     errors = []
-    # rules.json (required)
+    # rules.json (required): must exist and be valid
     rules_path = os.path.join(config_dir, "rules.json")
     if os.path.exists(rules_path):
         try:
@@ -46,28 +46,28 @@ def main():
             errors.append(str(e))
     else:
         errors.append("Missing required config: rules.json")
-    # overrides.csv (optional)
+    # overrides.csv (optional): validate if present
     overrides_path = os.path.join(config_dir, "overrides.csv")
     if os.path.exists(overrides_path):
         try:
             validate_overrides_csv(overrides_path)
         except Exception as e:
             errors.append(str(e))
-    # splits.csv (optional)
+    # splits.csv (optional): validate if present
     splits_path = os.path.join(config_dir, "splits.csv")
     if os.path.exists(splits_path):
         try:
             validate_splits_csv(splits_path)
         except Exception as e:
             errors.append(str(e))
-    # Report errors and exit if any
+    # If any config errors were found, print and exit
     if errors:
         print("[CONFIG VALIDATION FAILED]")
         for err in errors:
             print(f"  - {err}")
         exit(1)
 
-    # Indicate dry-run mode
+    # Indicate dry-run mode to the user
     if args.dry_run:
         print("[DRY-RUN] No state or output files will be written.")
 

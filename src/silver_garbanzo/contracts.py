@@ -27,10 +27,12 @@ def validate_csv_headers(headers: list[str]) -> None:
     Raises:
         ValueError: If required headers are missing or extra headers are present.
     """
+    # Check for missing required headers
     missing = [h for h in REQUIRED_HEADERS if h not in headers]
     if missing:
         raise ValueError(f"Missing required header(s): {missing}. Required: {REQUIRED_HEADERS}")
     # Optionally, enforce no extra headers (strict schema)
+    # Uncomment below to enforce strict schema (no extra columns allowed)
     # extra = [h for h in headers if h not in REQUIRED_HEADERS]
     # if extra:
     #     raise ValueError(f"Unexpected header(s): {extra}. Required: {REQUIRED_HEADERS}")
@@ -48,12 +50,16 @@ def validate_csv_date_range(rows: list[dict], start_date, end_date) -> None:
     out_of_range = []
     for i, row in enumerate(rows):
         try:
+            # Parse the date string in each row
             date = datetime.strptime(row["Date"], "%Y-%m-%d")
         except Exception as e:
+            # Raise a clear error if the date format is invalid
             raise ValueError(f"Row {i+1}: Invalid date format '{row['Date']}' ({e})")
+        # Check if the date is within the allowed range
         if not (start_date <= date <= end_date):
             out_of_range.append((i+1, row["Date"]))
     if out_of_range:
+        # Report all out-of-range dates at once
         raise ValueError(f"CSV contains dates outside filename-declared range: {out_of_range}")
 
 

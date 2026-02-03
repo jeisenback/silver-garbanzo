@@ -23,6 +23,7 @@ def check_range_overlap(
     Touching edges (end == new_start or start == new_end) are allowed.
     """
     if registry_path is None:
+        # Default to the canonical registry path if not provided
         registry_path = os.path.join(
             os.path.dirname(__file__),
             '..',
@@ -32,23 +33,29 @@ def check_range_overlap(
         )
         registry_path = os.path.normpath(registry_path)
     if not os.path.isfile(registry_path):
-        return  # No registry, no overlap
+        # If the registry does not exist, there can be no overlap
+        return
     with open(registry_path, newline='', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
+            # Only check for overlap with the same account
             if row['account'] != account:
                 continue
             reg_start = datetime.strptime(row['start_date'], '%Y-%m-%d')
             reg_end = datetime.strptime(row['end_date'], '%Y-%m-%d')
-            # Overlap: new_start <= existing_end AND new_end >= existing_start
-            # Touching edges allowed: (new_start == reg_end+1 or new_end == reg_start-1)
+            # Overlap logic: new_start <= existing_end AND new_end >= existing_start
+            # This means the ranges touch or overlap in any way
+            # Touching edges (adjacent, no overlap) are allowed:
+            #   - new_end == existing_start - 1 day
+            #   - new_start == existing_end + 1 day
             if (start_date <= reg_end and end_date >= reg_start):
-                # Touching edge check
+                # Check for touching edge (adjacent, not overlapping)
                 if (
                     end_date == reg_start - timedelta(days=1)
                     or start_date == reg_end + timedelta(days=1)
                 ):
                     continue
+                # If not just touching, this is a true overlap
                 raise ValueError(
                     f"Range {start_date.date()} to {end_date.date()} for account '{account}' "
                     f"overlaps existing range {reg_start.date()} to {reg_end.date()} "
