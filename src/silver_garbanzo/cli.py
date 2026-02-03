@@ -14,22 +14,24 @@ import tracemalloc
 from .ingest import ingest
 
 
-def main():
+
+def run_cli(args=None):
+    """
+    Run the Silver Garbanzo CLI. Accepts an optional list of arguments for testability.
+    """
     parser = argparse.ArgumentParser(description="Silver Garbanzo CLI")
     parser.add_argument("csv_file", help="Path to CSV file to ingest")
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help=(
-            "Run all validations but do not write any state or output files"
-        ),
+        help="Run all validations but do not write any state or output files",
     )
     parser.add_argument(
         "--profile",
         action="store_true",
         help="Profile ingest performance and memory usage",
     )
-    args = parser.parse_args()
+    parsed_args = parser.parse_args(args)
 
     # Validate config files before proceeding (fail fast if any are missing or malformed)
     from .config_validation import validate_overrides_csv, validate_rules_json, validate_splits_csv
@@ -68,21 +70,39 @@ def main():
         exit(1)
 
     # Indicate dry-run mode to the user
-    if args.dry_run:
+    if parsed_args.dry_run:
         print("[DRY-RUN] No state or output files will be written.")
 
-    if args.profile:
-        print("[PROFILE] Profiling ingest performance and memory usage...")
-        tracemalloc.start()
-        start_time = time.perf_counter()
-        ingest(args.csv_file, dry_run=args.dry_run)
-        end_time = time.perf_counter()
-        current, peak = tracemalloc.get_traced_memory()
-        tracemalloc.stop()
-        print(f"[PROFILE] Time elapsed: {end_time - start_time:.3f} seconds")
-        print(f"[PROFILE] Peak memory usage: {peak / 1024:.1f} KiB")
-    else:
-        ingest(args.csv_file, dry_run=args.dry_run)
+    # Support test isolation: allow registry path override via env var
+    registry_path = os.environ.get("SILVER_GARBANZO_REGISTRY_PATH")
+
+    try:
+        if parsed_args.profile:
+            print("[PROFILE] Profiling ingest performance and memory usage...")
+            tracemalloc.start()
+            start_time = time.perf_counter()
+            ingest(
+                parsed_args.csv_file,
+                dry_run=parsed_args.dry_run,
+                registry_path=registry_path if registry_path else None,
+            )
+            end_time = time.perf_counter()
+            current, peak = tracemalloc.get_traced_memory()
+            tracemalloc.stop()
+            print(f"[PROFILE] Time elapsed: {end_time - start_time:.3f} seconds")
+            print(f"[PROFILE] Peak memory usage: {peak / 1024:.1f} KiB")
+        else:
+            ingest(
+                parsed_args.csv_file,
+                dry_run=parsed_args.dry_run,
+                registry_path=registry_path if registry_path else None,
+            )
+    except ValueError as e:
+        print(f"[ERROR] {e}")
+        exit(1)
+
+def main():
+    run_cli()
 
 if __name__ == "__main__":
     main()
