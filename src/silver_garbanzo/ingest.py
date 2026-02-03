@@ -36,7 +36,10 @@ def ingest(csv_path, dry_run=False, registry_path=None):
     check_range_overlap(account, start_date, end_date, registry_path)
     # Dry-run: do not write registry
     if dry_run:
-        print(f"[DRY-RUN] Would append to registry: {account}, {start_date.date()}-{end_date.date()}, {filename}")
+        print(
+            f"[DRY-RUN] Would append to registry: {account}, "
+            f"{start_date.date()}-{end_date.date()}, {filename}"
+        )
         return True
     # Write registry
     append_range_registry(account, start_date, end_date, filename, registry_path)
