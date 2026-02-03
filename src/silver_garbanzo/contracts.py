@@ -9,12 +9,13 @@ contracts and safety for ingest operations.
 """
 
 
+
 import csv
 import os
 import re
+import tempfile
 from datetime import datetime, timedelta
 from typing import NamedTuple
-import tempfile
 
 REQUIRED_HEADERS = ["Date", "Description", "Amount", "Transaction_Type"]
 
@@ -55,18 +56,7 @@ def validate_csv_date_range(rows: list[dict], start_date, end_date) -> None:
     if out_of_range:
         raise ValueError(f"CSV contains dates outside filename-declared range: {out_of_range}")
 
-"""
-contracts.py — Filename and data contract validation.
 
-Implements the filename-based date range contract that is the primary
-safety mechanism for ingest operations.
-"""
-
-import csv
-import os
-import re
-from datetime import datetime
-from typing import NamedTuple
 
 
 class FilenameRange(NamedTuple):
@@ -151,7 +141,13 @@ def parse_filename_range(filename: str) -> FilenameRange:
         f"<account>__YYYY-MM-DD__YYYY-MM-DD.csv"
     )
 
-def append_range_registry(account: str, start_date: datetime, end_date: datetime, source_file: str, registry_path: str = None) -> None:
+def append_range_registry(
+    account: str,
+    start_date: datetime,
+    end_date: datetime,
+    source_file: str,
+    registry_path: str = None
+) -> None:
     """
     Append a successfully ingested range to the registry CSV atomically.
     Args:
