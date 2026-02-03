@@ -1,5 +1,7 @@
 # Silver Garbanzo (Personal Finance Ingest & Reporting)
 
+![CI](https://github.com/jeisenback/silver-garbanzo/actions/workflows/ci.yml/badge.svg?branch=dev)
+
 Local CLI tool to ingest bank transaction CSV exports, validate strict filename date ranges, categorize deterministically, and report spend/income by period and category.
 
 ## Purpose
