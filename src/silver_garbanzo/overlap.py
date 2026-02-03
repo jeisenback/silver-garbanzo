@@ -1,6 +1,15 @@
-import os
+
+"""
+overlap.py — Overlap detection for ingested ranges.
+
+This module provides logic to detect overlapping date ranges for account data during
+ingestion. It ensures that no duplicate or conflicting data is ingested for the same account.
+"""
+
 import csv
+import os
 from datetime import datetime, timedelta
+
 
 def check_range_overlap(account: str, start_date: datetime, end_date: datetime, registry_path: str = None) -> None:
     """

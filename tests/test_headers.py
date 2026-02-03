@@ -3,7 +3,9 @@ test_headers.py — Tests for CSV header validation contract.
 """
 
 import pytest
-from silver_garbanzo.contracts import validate_csv_headers, REQUIRED_HEADERS
+
+from silver_garbanzo.contracts import REQUIRED_HEADERS, validate_csv_headers
+
 
 class TestValidateCSVHeaders:
     """Test CSV header validation."""
